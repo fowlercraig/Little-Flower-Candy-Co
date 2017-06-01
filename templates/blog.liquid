@@ -1,0 +1,24 @@
+<div id="col-main" class="content">
+
+<div id="page-header">
+<h2 id="page-title" class="pageTitle">{{ blog.title }}</h2>
+</div>
+
+{% paginate blog.articles by 10 %}
+
+{% for article in blog.articles %}
+
+<article class="post clearfix">
+<h2 class="title"><a href="{{ article.url }}">{{ article.title | escape }}</a></h2>
+<div class="post-content">
+{{ article.excerpt_or_content }}
+</div>
+</article>
+
+{% endfor %}
+
+{% include 'pagination' %}
+
+{% endpaginate %}
+
+</div> <!-- /#col-main -->

@@ -1,0 +1,20 @@
+
+{% if product.available %}
+
+    <form id="product-{{ product.id }}" action="/cart/add" method="post">
+    
+	<select style="display:none;" id="product-variants-{{product.id}}" name="id">
+	       {% for variant in product.variants %}
+	         {% if variant.available %}
+	           <option value="{{variant.id}}" title="{{ variant.price | money }}">{{ variant.title | truncate: 14 }}</option>
+	         {% endif %}
+	       {% endfor %}
+	     </select>
+
+     <input type="submit" id="add-{{ product.id}}" name="add" value="Add to cart" onclick="Shopify.addItemFromForm('product-{{product.id}}');return false" />
+
+    </form>  
+    
+    {% else %}    
+      <p class="sold-out">sold out!</p>    
+    {% endif %}

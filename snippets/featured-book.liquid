@@ -1,0 +1,86 @@
+<div class="featuredProducts">
+	
+{% for product in collections.frontpage.products %} 
+	
+	<!-- /////////// GALLERY SLIDER ======================================================================= -->
+    <div id="product-gallery">
+		<div id="slides2">
+			<div class="slides_container">
+        		{% for image in product.images %}
+        		{% unless forloop.first and settings.main_image_display == 'Lightbox' %}
+        		
+				<div class="slide">
+					<img src="{{ image | product_img_url: 'large' }}" alt="{{ image.alt | escape }}" />
+				</div>
+				
+        		{% endunless %}
+        		{% endfor %}
+      		</div><!-- slides_container -->
+		</div><!-- slides2 -->
+		
+		<script>
+			$('#slides2').slides({
+				preload: true,
+				// preloadImage: 'http://cdn.shopify.com/s/files/1/0152/2565/t/4/assets/loaderAnd.png?1116',
+				play: 10000,
+				pause: 5000,
+				fadeSpeed: 2000,
+				effect: 'fade',
+				generateNextPrev: false,
+				pagination: true,
+				crossfade: true,
+				bigTarget: true,
+				animationStart: function() {
+					$('html body').find('.wrapper').each(function(e) {
+				    	var slideShade = $(this).find('#slides img').attr('alt');
+
+				        $(this).each(function() {
+				            $(this).addClass(slideShade);
+				        	});
+						});
+					}
+				});
+		</script>
+    </div>
+	<!-- /// END product-gallery -->
+	
+	<div class="description">
+		<h2>{{ product.title }}</h2>
+		
+		<span class="productType">{{ product.type }}</span>
+		
+		{{ product.description }}
+		
+	    <span class="product-price">
+	    {% if product.price_varies %} 
+	      <small>from</small> {{ product.price_min | money }}
+	    {% else %}
+	      {{ product.price_min | money }}
+	    {% endif %}
+	    </span>
+		
+		{% if product.available %}
+      	<form action="/cart/add" method="post" class="variants" id="product-actions">
+			<input type="hidden" name="return_to" value="back" />
+			<select style="display:none;" id="product-variants-{{product.id}}" name="id">
+			       {% for variant in product.variants %}
+			         {% if variant.available %}
+			           <option value="{{variant.id}}" title="{{ variant.price | money }}">{{ variant.title | truncate: 14 }}</option>
+			         {% endif %}
+			       {% endfor %}
+			     </select>
+		<input class="btn" type="submit" name="add" id="add-to-cart" value="Add to Cart" />
+		</form>
+
+        	{% else %}
+          	<div id="product-actions" class="sold-out">
+            	<div id="purchase">
+              <p class="price">Sold out.</p>      
+            </div>
+          	</div>      
+        	{% endif %}
+	</div>
+  
+{% endfor %}
+	<div style="clear:both;"></div>
+</div><!-- .featuredProducts -->

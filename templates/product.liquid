@@ -1,0 +1,98 @@
+<div id="col-main">
+<h2 class="pageTitle">{{ collection.title }}</h2>
+  <div id="product" class="clearfix content">
+    <div id="product-information">
+      <p id="add-to-cart-msg"></p>
+      <div id="product-header" class="diagonal-divider clearfix">
+		<div id="product-gallery" class="six columns alpha">
+			<div id="slides2">
+				<div class="slides_container">
+	        {% for image in product.images %}
+	        {% unless forloop.first and settings.main_image_display == 'Lightbox' %}
+	        <div class="slide">
+	            <img src="{{ image | product_img_url: 'original' }}" alt="{{ image.alt | escape }}" />
+	        </div>
+	        {% endunless %}
+	        {% endfor %}
+	      </div>
+		</div>
+		<script>
+			$('#slides2').slides({
+				preload: true,
+				// preloadImage: 'http://cdn.shopify.com/s/files/1/0152/2565/t/4/assets/loaderAnd.png?1116',
+				play: 5000,
+				pause: 3000,
+				fadeSpeed: 500,
+				effect: 'fade',
+				generateNextPrev: false,
+				pagination: true,
+				crossfade: true,
+				bigTarget: true,
+				animationStart: function() {
+					$('html body').find('.wrapper').each(function(e) {
+						var slideShade = $(this).find('#slides img').attr('alt');
+						$(this).each(function() {
+							$(this).addClass(slideShade);
+						});
+					});
+				}
+			});
+		</script>
+	   </div><!-- /#product-gallery -->
+		<div class="description">
+        	<h2>{{ product.title }}</h2>
+			<span class="productType">{{ product.type }}</span>
+			{{ product.description }}
+			{% if product.available %}
+			<form action="/cart/add" method="post" class="variants" id="product-actions">
+				<div class="options clearfix">  
+					<div class="variants-wrapper clearfix {% if product.variants.size == 1 %}visuallyhidden{% endif %}"> 
+						<select id="product-select" name="id">
+							{% for variant in product.variants %}
+							<option value="{{ variant.id }}">{{ variant.title | escape }} - {{ variant.price | money }}</option>
+							{% endfor %}
+						</select>
+					</div>            
+					<p class="price product-price"></p>                                 
+					<input class="btn" type="submit" name="add" id="add-to-cart" value="Add to Cart" />
+				</div><!-- /.options -->
+			</form>
+			{% else %}
+			<div id="product-actions" class="sold-out">
+				<div id="purchase">
+					<p class="price">Sold out.</p>      
+				</div>
+			</div>      
+			{% endif %}
+      </div><!-- /#product-header -->
+	</div>
+</div><!-- /#product-information -->
+<div class="previous">{{ '« Previous' | link_to: collection.previous_product }}</div>
+<div class="next">{{ 'Next »' | link_to: collection.next_product }}</div>
+</div><!-- /#product -->
+<div id="related">
+	<h2 class="pageTitle">Other Stuff</h2>
+	<ul class="product-grid">
+	{% for product in collections.goods.products %} 
+		<li{% cycle '', '', '', ' class="last-in-row"' %}>
+			<div class="product-grid-item " id="product-{{ product.variants.first.id }}">
+			<a href="{{ product.url | within: collection }}" class="product-link" title="{{ product.featured_image.alt | escape }}">
+			<div class="productImage"><img src="{{ product.featured_image | product_img_url: 'medium' }}" class="product-photo" alt="{{ product.featured_image.alt | escape }}" /></div>
+			</a>
+			<div class="product-information">
+			<h4><a href="{{ product.url | within: collection }}">{{ product.title }}</a></h4>
+			<span class="product-price">
+			{% if product.price_varies %} 
+			<small>from</small> {{ product.price_min | money }}
+			{% else %}
+			{{ product.price_min | money }}
+			{% endif %}
+			</span>
+			<span class="button"><a href="{{ product.url | within: collections }}">View Product &rarr;</a></span>
+			</div>    
+			</div>    
+		</li>
+	{% endfor %}
+	</ul>
+</div>
+</div><!-- /#col-main -->

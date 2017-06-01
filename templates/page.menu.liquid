@@ -1,0 +1,18 @@
+<div id="col-main" class="content pageContent {{page.handle}} specials">
+
+<h2 class="pageTitle">{{page.title}}</h2>
+{{ page.content }}
+
+<hr style="visibility:hidden"/>
+
+{% capture pageHandle %}{{page.handle}}{% endcapture %}
+{% for article in blogs[pageHandle].articles limit: 25 %}
+<article class="post clearfix">
+<h2 class="title"><a href="{{ article.url }}">{{ article.title | escape }}</a></h2>
+<div class="post-content">
+{{ article.excerpt_or_content }}
+</div>
+</article>
+{% endfor %}
+
+</div><!-- /#col-main -->

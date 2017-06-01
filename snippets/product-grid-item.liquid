@@ -1,0 +1,20 @@
+<div class="product-grid-item " id="product-{{ product.variants.first.id }}">
+<a href="{{ product.url | within: collection }}" class="product-link" title="{{ product.featured_image.alt | escape }}">
+<div class="productImage"><img src="{{ product.featured_image | product_img_url: 'medium' }}" class="product-photo" alt="{{ product.featured_image.alt | escape }}" /></div>
+</a>
+<div class="product-information">
+<h4><a href="{{ product.url | within: collection }}">{{ product.title }}</a></h4>
+<span class="productType">{{ product.type }}</span>
+<p>{{ product.description | strip_html | truncate: 100 }}</p>
+<span class="product-price">
+{% if product.price_varies %} 
+<small>from</small> {{ product.price_min | money }}
+{% else %}
+{{ product.price_min | money }}
+{% endif %}
+</span>
+<div class="button-holder">
+<span class="button"><a href="{{ product.url | within: collections }}">View Product &rarr;</a></span>
+</div>
+</div>    
+</div>    

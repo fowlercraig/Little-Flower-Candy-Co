@@ -1,0 +1,20 @@
+<div id="col-main" class="{{ collection.handle }}">
+	<h2 class="pageTitle">{{ collection.title }}</h2>
+	<p id="add-to-cart-msg"></p>
+  	<section class="diagonal-divider clearfix">
+    {% paginate collection.products by 12 %}
+      {% if collection.products.size > 0 %}
+        <ul class="product-grid">
+        {% for product in collections.goods.products %} 
+          <li{% cycle '', '', '', ' class="last-in-row"' %}>
+            {% include 'product-grid-item' %}
+          </li>
+        {% endfor %}
+        </ul>
+        {% include 'pagination' %}
+      {% else %}    
+        <strong>No products found in this collection.</strong>
+      {% endif %}
+    {% endpaginate %}
+  </section>
+</div>
